@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Туристичні шляхи Чернігівщини</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Навігація -->
+  <nav class="navbar">
+    <div class="brand">🌍 Чернігівщина Туристична</div>
+    <div class="nav-links">
+      <span class="user-info" id="userInfo">Гість</span>
+      <button id="loginBtn">Увійти</button>
+      <button id="registerBtn">Реєстрація</button>
+      <button id="profileBtn" style="display:none;">Мій профіль</button>
+      <button id="logoutBtn" style="display:none;">Вийти</button>
+    </div>
+  </nav>
+
+  <h1>Інтерактивна мапа області</h1>
+  <div id="map"></div>
+
+  <!-- Сторінка профілю -->
+  <div id="profilePage">
+    <button id="closeProfileBtn">Закрити профіль</button>
+    <h2>Мої туристичні списки</h2>
+    <div class="profile-lists">
+      <div class="profile-list">
+        <h3>❤️ Улюблене</h3>
+        <ul id="favoritesList"><li>Завантаження...</li></ul>
+      </div>
+      <div class="profile-list">
+        <h3>✅ Відвідано</h3>
+        <ul id="visitedList"><li>Завантаження...</li></ul>
+      </div>
+    </div>
+    <div id="myReviewsSection" class="profile-list">
+      <h3>📝 Мої відгуки</h3>
+      <ul id="myReviewsList"><li>Завантаження...</li></ul>
+    </div>
+    <button id="proposeLocationBtn" style="margin-top:20px; padding:8px 20px; background:#1f2937; color:white; border:none; border-radius:8px; cursor:pointer;">
+      📍 Запропонувати нову локацію
+    </button>
+    <div id="myProposalsSection" class="profile-list">
+      <h3>📋 Мої запити на локації</h3>
+      <ul id="myProposalsList"><li>Завантаження...</li></ul>
+    </div>
+  </div>
+
+  <!-- Бічна панель -->
+  <div id="sidebar" class="sidebar">
+    <button class="close-btn" id="closeSidebar">&times;</button>
+    <img id="sidebarImage" src="" alt="Фото місця" />
+    <h2 id="sidebarTitle"></h2>
+    <p id="sidebarDesc"></p>
+    <a id="sidebarWiki" class="wiki-link" href="#" target="_blank">Детальніше на Вікіпедії</a>
+    <div class="list-buttons">
+      <button id="favBtn" disabled>❤️ Додати в улюблене</button>
+      <button id="visitedBtn" disabled>✅ Додати у відвідано</button>
+    </div>
+    <p id="sidebarStatus"></p>
+
+    <div id="reviewsSection">
+      <h3>Відгуки <span class="avg-rating" id="avgRating">(⭐ 0.0)</span></h3>
+      <div id="reviewsList"></div>
+      <div id="reviewFormContainer" style="display:none;">
+        <h4>Залишити відгук</h4>
+        <select id="ratingSelect">
+          <option value="5">⭐⭐⭐⭐⭐ 5</option>
+          <option value="4">⭐⭐⭐⭐ 4</option>
+          <option value="3">⭐⭐⭐ 3</option>
+          <option value="2">⭐⭐ 2</option>
+          <option value="1">⭐ 1</option>
+        </select>
+        <textarea id="commentInput" placeholder="Ваш коментар..." rows="2"></textarea>
+        <button id="submitReviewBtn">Надіслати</button>
+      </div>
+      <p id="reviewStatus"></p>
+    </div>
+  </div>
+
+  <!-- Модальне вікно для пропозиції локації -->
+  <div id="proposeModal" class="modal">
+    <div class="modal-content" style="max-width:500px;">
+      <button class="close-modal" data-close="proposeModal">&times;</button>
+      <h2>Запропонувати нову локацію</h2>
+      <div id="proposeError" class="error-msg"></div>
+      <form id="proposeForm">
+        <input type="text" id="propName" placeholder="Назва" required />
+        <textarea id="propDesc" placeholder="Опис" rows="3" required></textarea>
+        <div style="display:flex; gap:10px;">
+          <input type="number" id="propLat" placeholder="Широта" step="any" required style="flex:1;" />
+          <input type="number" id="propLng" placeholder="Довгота" step="any" required style="flex:1;" />
+        </div>
+        <select id="propCategory" required>
+          <option value="">Виберіть категорію</option>
+          <option value="church">Храм</option>
+          <option value="museum">Музей/Садиба</option>
+          <option value="nature">Природа</option>
+          <option value="town">Місто</option>
+          <option value="district_center">Районний центр</option>'district_center'
+
+        </select>
+        <input type="url" id="propImage" placeholder="URL фото (необов'язково)" />
+        <input type="url" id="propWiki" placeholder="URL Вікіпедії (необов'язково)" />
+        <button type="submit">Надіслати запит</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модальні вікна -->
+  <div id="registerModal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" data-close="registerModal">&times;</button>
+      <h2>Реєстрація</h2>
+      <div id="registerError" class="error-msg"></div>
+      <form id="registerForm">
+        <input type="text" id="regUsername" placeholder="Логін" required />
+        <input type="email" id="regEmail" placeholder="Email" required />
+        <input type="password" id="regPassword" placeholder="Пароль" required />
+        <button type="submit">Зареєструватися</button>
+      </form>
+      <div class="switch-link">Вже є акаунт? <a id="switchToLogin">Увійти</a></div>
+    </div>
+  </div>
+
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" data-close="loginModal">&times;</button>
+      <h2>Вхід</h2>
+      <div id="loginError" class="error-msg"></div>
+      <form id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Логін або Email" required />
+        <input type="password" id="loginPassword" placeholder="Пароль" required />
+        <button type="submit">Увійти</button>
+      </form>
+      <div class="switch-link">Немає акаунту? <a id="switchToRegister">Зареєструватися</a></div>
+    </div>
+  </div>
+
+  <!-- Toast повідомлення -->
+  <div id="toast" class="toast"></div>
+
+    <!-- Бібліотеки -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+  <!-- Власні скрипти – обов'язково type="module" -->
+  <script type="module" src="js/config.js"></script>
+  <script type="module" src="js/utils.js"></script>
+  <script type="module" src="js/map.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/profile.js"></script>
+  <script type="module" src="js/reviews.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

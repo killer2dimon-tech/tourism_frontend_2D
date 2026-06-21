@@ -1,0 +1,491 @@
+/* ===== Загальні ===== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: #f5f7fa;
+}
+h1 {
+  margin: 15px 0 5px 20px;
+  font-size: 24px;
+  color: #1f2937;
+}
+#map {
+  height: 600px;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin: 10px auto;
+  max-width: 1400px;
+}
+
+/* ===== Навігація ===== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1f2937;
+  padding: 10px 25px;
+  color: white;
+  flex-wrap: wrap;
+}
+.navbar .brand {
+  font-size: 20px;
+  font-weight: bold;
+  color: #facc15;
+}
+.navbar .nav-links {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.navbar button {
+  background: transparent;
+  border: 1px solid #facc15;
+  color: #facc15;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+.navbar button:hover {
+  background: #facc15;
+  color: #1f2937;
+}
+.navbar .user-info {
+  color: #ddd;
+  font-size: 14px;
+  margin-right: 6px;
+}
+.navbar .user-info span {
+  color: #facc15;
+  font-weight: bold;
+}
+
+/* ===== Модальні вікна ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+.modal.active {
+  display: flex;
+}
+.modal-content {
+  background: white;
+  padding: 30px 35px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+  position: relative;
+}
+.modal-content h2 {
+  margin-top: 0;
+  color: #1f2937;
+}
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+.modal-content button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background: #1f2937;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.modal-content button[type="submit"]:hover {
+  background: #374151;
+}
+.modal-content .close-modal {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #888;
+  background: none;
+  border: none;
+}
+.modal-content .close-modal:hover {
+  color: #222;
+}
+.modal-content .switch-link {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.modal-content .switch-link a {
+  color: #1f2937;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.error-msg {
+  color: #dc2626;
+  font-size: 13px;
+  margin-bottom: 8px;
+  display: none;
+}
+
+/* ===== Бічна панель ===== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -450px;
+  width: 420px;
+  height: 100vh;
+  background: white;
+  box-shadow: -4px 0 15px rgba(0,0,0,0.2);
+  transition: right 0.4s ease;
+  z-index: 1500;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.sidebar.open {
+  right: 0;
+}
+/* Хрестик закриття – тепер помітний */
+.sidebar .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+  z-index: 10;
+}
+.sidebar .close-btn:hover {
+  background: #f3f4f6;
+  transform: scale(1.05);
+}
+.sidebar img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: #f0f0f0;
+}
+.sidebar h2 {
+  margin-top: 0;
+  font-size: 22px;
+  color: #1f2937;
+}
+.sidebar p {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+.sidebar .wiki-link {
+  display: inline-block;
+  margin: 8px 0 12px;
+  color: #1a73e8;
+  text-decoration: none;
+}
+.sidebar .wiki-link:hover {
+  text-decoration: underline;
+}
+.sidebar .list-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.sidebar .list-buttons button {
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background: #f9f9f9;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+.sidebar .list-buttons button:hover {
+  background: #e5e7eb;
+}
+.sidebar .list-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+#sidebarStatus {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 8px;
+}
+
+/* ===== Профіль ===== */
+#profilePage {
+  display: none;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+#profilePage.active {
+  display: block;
+}
+#profilePage h2 {
+  color: #1f2937;
+  border-bottom: 2px solid #facc15;
+  padding-bottom: 8px;
+}
+.profile-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+@media (max-width: 700px) {
+  .profile-lists {
+    grid-template-columns: 1fr;
+  }
+}
+.profile-list {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+.profile-list h3 {
+  margin-top: 0;
+  color: #1f2937;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 6px;
+}
+.profile-list ul {
+  list-style: none;
+  padding: 0;
+}
+.profile-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.profile-list li .remove-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 2px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.profile-list li .remove-btn:hover {
+  background: #dc2626;
+}
+.profile-list li .location-link {
+  cursor: pointer;
+  color: #1a73e8;
+  text-decoration: none;
+}
+.profile-list li .location-link:hover {
+  text-decoration: underline;
+}
+#closeProfileBtn {
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ===== Легенда карти ===== */
+.legend {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.legend span {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  z-index: 3000;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+}
+.hidden {
+  display: none;
+}
+
+/* ===== Відгуки ===== */
+#reviewsSection {
+  margin-top: 20px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 12px;
+}
+#reviewsSection h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #1f2937;
+}
+#reviewsSection .avg-rating {
+  font-weight: bold;
+  color: #facc15;
+}
+.review-item {
+  border-bottom: 1px solid #f3f4f6;
+  padding: 10px 0;
+}
+.review-item .review-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #4b5563;
+}
+.review-item .review-rating {
+  color: #f59e0b;
+}
+.review-item .review-comment {
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+.review-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 5px;
+}
+.review-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.review-actions .edit-btn {
+  color: #2563eb;
+}
+.review-actions .edit-btn:hover {
+  background: #dbeafe;
+}
+.review-actions .delete-btn {
+  color: #dc2626;
+}
+.review-actions .delete-btn:hover {
+  background: #fee2e2;
+}
+.review-actions .save-btn {
+  background: #1f2937;
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.review-actions .save-btn:hover {
+  background: #374151;
+}
+.review-actions .cancel-btn {
+  background: #e5e7eb;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.review-actions .cancel-btn:hover {
+  background: #d1d5db;
+}
+.edit-review-form {
+  margin-top: 6px;
+}
+.edit-review-form select,
+.edit-review-form textarea {
+  width: 100%;
+  padding: 6px;
+  margin: 4px 0;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+#reviewFormContainer {
+  margin-top: 15px;
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 8px;
+}
+#reviewFormContainer select,
+#reviewFormContainer textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+#reviewFormContainer button {
+  background: #1f2937;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#reviewFormContainer button:hover {
+  background: #374151;
+}
+#reviewStatus {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 8px;
+}
+#myReviewsSection {
+  margin-top: 30px;
+}
+#myReviewsList .review-item {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 0;
+}
