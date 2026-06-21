@@ -3,10 +3,10 @@ import { renderProfile } from './profile.js';
 
 let currentLocationId = null;
 
-// Експортуємо функцію для встановлення поточного ID (потрібно для інших модулів)
+// Експортуємо функцію для встановлення поточного ID 
 export function setCurrentLocationId(id) {
   currentLocationId = id;
-  window.currentLocationId = id; // для зручності
+  window.currentLocationId = id;
 }
 
 export function openSidebar(locationId) {

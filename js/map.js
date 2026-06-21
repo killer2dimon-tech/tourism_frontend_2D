@@ -41,7 +41,7 @@ export function initMap() {
   loadLocations();
 }
 
-// Кольори для маркерів (без змін)
+// Кольори для маркерів
 const colors = {
   church: '#d73027',
   museum: '#fc8d59',

@@ -93,7 +93,7 @@ export async function renderProfile() {
       attachReviewHandlers(myReviewsList, 'profile-edit-');
     }
 
-    // ---- ЗАПИТИ НА ЛОКАЦІЇ (НОВИЙ БЛОК) ----
+    // ---- ЗАПИТИ НА ЛОКАЦІЇ ----
     const proposals = await apiFetch('location-proposals/');
     if (proposals.length === 0) {
       myProposalsList.innerHTML = '<li style="color:#999;">Ви ще не подавали запитів</li>';

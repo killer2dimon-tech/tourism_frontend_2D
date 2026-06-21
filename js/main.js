@@ -36,7 +36,6 @@ export function updateUIForUser() {
       document.getElementById('map').style.display = 'block';
     }
   }
-  // Якщо бічна панель відкрита, оновити відгуки (це робиться в reviews.js при кліку)
 }
 
 // Профіль

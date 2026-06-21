@@ -162,7 +162,7 @@ h1 {
 .sidebar.open {
   right: 0;
 }
-/* Хрестик закриття – тепер помітний */
+/* Хрестик закриття */
 .sidebar .close-btn {
   position: absolute;
   top: 10px;
